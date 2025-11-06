@@ -1,0 +1,42 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#1C1C1C"/>
+  
+  <!-- Premium Frame -->
+  <rect x="50" y="50" width="300" height="200" rx="20" fill="none" stroke="#FFD700" stroke-width="3"/>
+  <rect x="60" y="60" width="280" height="180" rx="15" fill="none" stroke="#50C878" stroke-width="2"/>
+  
+  <!-- Logo Design -->
+  <circle cx="200" cy="140" r="60" fill="none" stroke="#FFD700" stroke-width="4"/>
+  <circle cx="200" cy="140" r="45" fill="none" stroke="#50C878" stroke-width="3"/>
+  
+  <!-- Arabic Text -->
+  <text x="200" y="130" text-anchor="middle" font-family="serif" font-size="24" font-weight="bold" fill="#FFD700">أمزوارو</text>
+  <text x="200" y="150" text-anchor="middle" font-family="serif" font-size="12" fill="#C0C0C0">AMZWARO</text>
+  
+  <!-- Premium Elements -->
+  <polygon points="200,80 210,100 230,100 215,115 220,135 200,125 180,135 185,115 170,100 190,100" fill="#FFD700"/>
+  <polygon points="200,200 210,180 230,180 215,165 220,145 200,155 180,145 185,165 170,180 190,180" fill="#FFD700"/>
+  
+  <!-- Decorative Lines -->
+  <line x1="100" y1="140" x2="160" y2="140" stroke="#50C878" stroke-width="2"/>
+  <line x1="240" y1="140" x2="300" y2="140" stroke="#50C878" stroke-width="2"/>
+  
+  <!-- Luxury Pattern -->
+  <rect x="80" y="220" width="240" height="20" fill="#FFD700" opacity="0.3"/>
+  <circle cx="100" cy="230" r="3" fill="#50C878"/>
+  <circle cx="120" cy="230" r="3" fill="#50C878"/>
+  <circle cx="140" cy="230" r="3" fill="#50C878"/>
+  <circle cx="160" cy="230" r="3" fill="#50C878"/>
+  <circle cx="180" cy="230" r="3" fill="#50C878"/>
+  <circle cx="200" cy="230" r="3" fill="#50C878"/>
+  <circle cx="220" cy="230" r="3" fill="#50C878"/>
+  <circle cx="240" cy="230" r="3" fill="#50C878"/>
+  <circle cx="260" cy="230" r="3" fill="#50C878"/>
+  <circle cx="280" cy="230" r="3" fill="#50C878"/>
+  <circle cx="300" cy="230" r="3" fill="#50C878"/>
+  
+  <!-- Premium Badge -->
+  <rect x="320" y="70" width="60" height="30" rx="15" fill="#FFD700"/>
+  <text x="350" y="90" text-anchor="middle" font-family="serif" font-size="10" font-weight="bold" fill="#1C1C1C">PREMIUM</text>
+</svg>
