@@ -1,8 +1,14 @@
-# Projet Noms Commerciaux Premium
+# 🫒 Projet Noms Commerciaux Premium
 ## Huile d'Olive Tunisienne
 
-### Description du Projet
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+### 📝 Description du Projet
 Site web présentant 10 propositions de noms commerciaux authentiques et mémorables pour une marque d'huile d'olive premium tunisienne. Chaque nom a été soigneusement sélectionné pour sa signification profonde, sa facilité de prononciation internationale et son potentiel marketing.
+
+🌐 **Website**: [Voir le site](https://younsi-alaeddine.github.io/luile-dolive/) (si GitHub Pages est activé)
 
 ### Structure du Projet
 ```
@@ -80,4 +86,20 @@ git clone https://github.com/younsi-alaeddine/luile-dolive.git
 
 ---
 
+## 📊 Statistiques du Projet
+
+- **10 Noms Commerciaux** proposés
+- **3 Langues** supportées (FR/AR)
+- **100% Responsive** (Mobile, Tablette, Desktop)
+- **2 Thèmes** (Clair/Sombre)
+
+## 🏷️ Topics GitHub
+
+Pour améliorer la découvrabilité du projet sur GitHub, ajoutez ces topics :
+- `html` `css` `javascript` `web-design` `branding` `olive-oil` `tunisia` `commercial-names` `premium` `responsive-design` `bilingual` `dark-mode` `marketing` `business` `arabic` `french` `frontend` `web-development`
+
+---
+
 *Projet créé pour le développement de marques d'huile d'olive premium tunisienne*
+
+⭐ **N'hésitez pas à mettre une étoile si ce projet vous a été utile !**
