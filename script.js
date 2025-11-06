@@ -416,10 +416,14 @@ function testButtons() {
     buttons.forEach((btn, index) => {
         const href = btn.getAttribute('href');
         const text = btn.textContent.trim();
-        console.log(`Button ${index + 1}: "${text}" -> ${href || 'No href'}`);
+        const isSubmitButton = btn.type === 'submit';
+        const isInForm = btn.closest('form') !== null;
+        
+        console.log(`Button ${index + 1}: "${text}" -> ${href || (isSubmitButton ? 'Form submit handler' : 'No href')}`);
         
         // Test if button has proper href or onclick
-        if (!href && !btn.onclick) {
+        // Skip submit buttons in forms as they're handled by form submit event
+        if (!href && !btn.onclick && !isSubmitButton) {
             console.warn(`Button "${text}" has no href or onclick handler`);
         }
     });
@@ -1182,9 +1186,12 @@ revealStyle.textContent = `
 document.head.appendChild(revealStyle);
 
 // Contact Form Handling
-document.addEventListener('DOMContentLoaded', () => {
+function initializeContactForm() {
     const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
+    if (!contactForm) {
+        console.warn('Contact form not found');
+        return;
+    }
     
     const nameInput = document.getElementById('name');
     const emailInput = document.getElementById('email');
@@ -1329,4 +1336,14 @@ ${formData.message}
             btnLoader.style.display = 'none';
         }
     });
-});
+    
+    console.log('Contact form handler attached successfully');
+}
+
+// Initialize contact form on DOM ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeContactForm);
+} else {
+    // DOM already loaded
+    initializeContactForm();
+}
