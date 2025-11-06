@@ -2462,6 +2462,16 @@ section {
     margin-bottom: 4rem;
     visibility: visible !important;
     opacity: 1 !important;
+    width: 100%;
+}
+
+/* Mobile first - single column */
+@media (max-width: 768px) {
+    .noms-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        padding: 0 1rem;
+    }
 }
 
 .nom-card {
@@ -2478,6 +2488,9 @@ section {
     transform: translateY(0) !important;
     visibility: visible !important;
     min-height: 400px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .nom-card::before {
@@ -2900,8 +2913,21 @@ section {
 /* Responsive Design for Noms Commerciaux */
 @media (max-width: 768px) {
     .noms-grid {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+        padding: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: grid !important;
+    }
+    
+    .nom-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
     }
     
     .intro-text {
@@ -3032,9 +3058,21 @@ section {
 }
 
 @media (max-width: 480px) {
+    .noms-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
     .nom-card {
         border-radius: 12px;
         min-height: auto;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
     }
     
     .nom-header {
