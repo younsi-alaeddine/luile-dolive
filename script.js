@@ -415,15 +415,27 @@ function testButtons() {
     
     buttons.forEach((btn, index) => {
         const href = btn.getAttribute('href');
-        const text = btn.textContent.trim();
-        const isSubmitButton = btn.type === 'submit';
+        const text = btn.textContent.trim().split('\n')[0]; // Get first line only
+        const isSubmitButton = btn.type === 'submit' || btn.getAttribute('type') === 'submit';
         const isInForm = btn.closest('form') !== null;
+        const form = btn.closest('form');
+        const hasFormHandler = form && form.hasAttribute('id');
         
-        console.log(`Button ${index + 1}: "${text}" -> ${href || (isSubmitButton ? 'Form submit handler' : 'No href')}`);
+        // Determine button type
+        let buttonType = 'No href';
+        if (href) {
+            buttonType = href;
+        } else if (isSubmitButton && isInForm) {
+            buttonType = 'Form submit handler';
+        } else if (btn.onclick) {
+            buttonType = 'onclick handler';
+        }
+        
+        console.log(`Button ${index + 1}: "${text}" -> ${buttonType}`);
         
         // Test if button has proper href or onclick
         // Skip submit buttons in forms as they're handled by form submit event
-        if (!href && !btn.onclick && !isSubmitButton) {
+        if (!href && !btn.onclick && !(isSubmitButton && isInForm)) {
             console.warn(`Button "${text}" has no href or onclick handler`);
         }
     });
