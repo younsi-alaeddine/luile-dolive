@@ -4,7 +4,7 @@
 Site web présentant 10 propositions de noms commerciaux authentiques et mémorables pour une marque d'huile d'olive premium tunisienne. Chaque nom a été soigneusement sélectionné pour sa signification profonde, sa facilité de prononciation internationale et son potentiel marketing.
 
 ## Website
-https://younsi-alaeddine.github.io/luile-dolive/ (à configurer si vous avez GitHub Pages)
+https://luile-dolive.vercel.app/
 
 ## Topics (Tags) suggérés
 - html

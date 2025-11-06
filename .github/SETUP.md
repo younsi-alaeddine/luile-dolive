@@ -16,9 +16,9 @@ Site web présentant 10 propositions de noms commerciaux authentiques et mémora
 
 #### Website
 ```
-https://younsi-alaeddine.github.io/luile-dolive/
+https://luile-dolive.vercel.app/
 ```
-*(Note: Activez GitHub Pages dans Settings > Pages si vous voulez héberger le site)*
+*(Site déployé sur Vercel)*
 
 #### Topics (Tags)
 Copiez-collez ces topics un par un :
@@ -50,7 +50,7 @@ Si vous avez GitHub CLI installé :
 ```bash
 gh repo edit younsi-alaeddine/luile-dolive \
   --description "Site web présentant 10 propositions de noms commerciaux authentiques et mémorables pour une marque d'huile d'olive premium tunisienne." \
-  --homepage "https://younsi-alaeddine.github.io/luile-dolive/" \
+  --homepage "https://luile-dolive.vercel.app/" \
   --add-topic html,css,javascript,web-design,branding,olive-oil,tunisia,commercial-names,premium,responsive-design,bilingual,dark-mode,marketing,business,arabic,french,frontend,web-development
 ```
 

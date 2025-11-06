@@ -8,7 +8,9 @@
 ### 📝 Description du Projet
 Site web présentant 10 propositions de noms commerciaux authentiques et mémorables pour une marque d'huile d'olive premium tunisienne. Chaque nom a été soigneusement sélectionné pour sa signification profonde, sa facilité de prononciation internationale et son potentiel marketing.
 
-🌐 **Website**: [Voir le site](https://younsi-alaeddine.github.io/luile-dolive/) (si GitHub Pages est activé)
+🌐 **Website**: [https://luile-dolive.vercel.app/](https://luile-dolive.vercel.app/)
+
+🚀 **Déployé sur Vercel** - Site en ligne et accessible
 
 ### Structure du Projet
 ```
@@ -69,14 +71,27 @@ projet luile de olive/
 - ✅ Page d'estimation de projet
 - ✅ Présentation des 10 noms commerciaux
 
-### Installation
+### 🌐 Accès au Site
+
+**Site en ligne** : [https://luile-dolive.vercel.app/](https://luile-dolive.vercel.app/)
+
+### Installation Locale
 
 1. Cloner le dépôt :
 ```bash
 git clone https://github.com/younsi-alaeddine/luile-dolive.git
+cd luile-dolive
 ```
 
 2. Ouvrir `index.html` dans un navigateur web
+
+### Déploiement
+
+Le site est actuellement déployé sur **Vercel**. Pour redéployer :
+
+1. Connecter le dépôt GitHub à Vercel
+2. Vercel détectera automatiquement les changements
+3. Chaque push sur `main` déclenchera un nouveau déploiement
 
 ### Contact
 
