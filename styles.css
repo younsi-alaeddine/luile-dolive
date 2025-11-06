@@ -2519,6 +2519,22 @@ section {
     background: linear-gradient(135deg, var(--tazmourt-primary), var(--tazmourt-secondary));
 }
 
+/* Selected card style */
+.nom-card.selected {
+    border: 3px solid var(--tazmourt-primary);
+    box-shadow: 0 8px 40px rgba(45, 80, 22, 0.2);
+    transform: translateY(-5px);
+}
+
+.nom-card.selected::before {
+    transform: scaleX(1);
+    height: 6px;
+}
+
+.nom-card.selected .nom-header {
+    background: linear-gradient(135deg, var(--tazmourt-primary), var(--tazmourt-secondary));
+}
+
 .nom-header {
     background: var(--tazmourt-primary);
     padding: 2.5rem 2rem;
