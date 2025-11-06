@@ -35,7 +35,7 @@ projet luile de olive/
 
 ### Noms Commerciaux Proposés
 
-1. **سَليل (Saleel)** - Premium
+1. **سَليل (Oliba)** - Premium
 2. **نُورَا (Noura)** - Élégant
 3. **زَيتونَا (Zaytouna)** - Authentique
 4. **رَفِيدَة (Rafida)** - Unique
