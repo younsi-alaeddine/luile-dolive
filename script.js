@@ -5,13 +5,20 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
             // Close mobile menu if open
-            const nav = document.querySelector('.nav');
+            const navbar = document.querySelector('.navbar');
+            const navMenu = document.querySelector('.nav-menu');
             const hamburger = document.querySelector('.hamburger');
-            if (nav.classList.contains('active')) {
-                nav.classList.remove('active');
-                hamburger.classList.remove('active');
+            
+            if (navbar && navbar.classList.contains('active')) {
+                navbar.classList.remove('active');
+                if (navMenu) navMenu.classList.remove('active');
+                if (hamburger) {
+                    hamburger.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                }
             }
             
+            // Smooth scroll to target
             target.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
@@ -23,21 +30,39 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // Mobile menu toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
-const nav = document.querySelector('.navbar');
+const navbar = document.querySelector('.navbar');
 const navControls = document.querySelector('.nav-controls');
+const navOverlay = document.querySelector('.nav-menu-overlay');
 
 if (hamburger) {
     hamburger.addEventListener('click', () => {
         const isActive = hamburger.classList.contains('active');
         hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        nav.classList.toggle('active');
+        if (navMenu) navMenu.classList.toggle('active');
+        if (navbar) navbar.classList.toggle('active');
+        if (navOverlay) navOverlay.classList.toggle('active');
         
-        // Keep nav controls visible on mobile (they're at the bottom now)
-        // No need to hide/show them anymore
+        // Prevent body scroll when menu is open
+        if (!isActive) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
         
         // Update aria-expanded for accessibility
         hamburger.setAttribute('aria-expanded', !isActive);
+    });
+}
+
+// Close menu when clicking on overlay
+if (navOverlay) {
+    navOverlay.addEventListener('click', () => {
+        if (hamburger) hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        if (navbar) navbar.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
     });
 }
 
@@ -48,10 +73,10 @@ document.querySelectorAll('.nav-link').forEach(link => {
             hamburger.classList.remove('active');
             hamburger.setAttribute('aria-expanded', 'false');
         }
-        navMenu.classList.remove('active');
-        nav.classList.remove('active');
-        
-        // Nav controls stay visible (positioned at bottom on mobile)
+        if (navMenu) navMenu.classList.remove('active');
+        if (navbar) navbar.classList.remove('active');
+        if (navOverlay) navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
     });
 });
 
@@ -60,10 +85,10 @@ document.addEventListener('click', (e) => {
     if (hamburger && navMenu && !hamburger.contains(e.target) && !navMenu.contains(e.target) && !navControls?.contains(e.target)) {
         hamburger.classList.remove('active');
         hamburger.setAttribute('aria-expanded', 'false');
-        navMenu.classList.remove('active');
-        nav.classList.remove('active');
-        
-        // Nav controls stay visible (positioned at bottom on mobile)
+        if (navMenu) navMenu.classList.remove('active');
+        if (navbar) navbar.classList.remove('active');
+        if (navOverlay) navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
     }
 });
 
@@ -79,7 +104,10 @@ window.addEventListener('resize', () => {
         if (hamburger && navMenu && navMenu.classList.contains('active')) {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
-            document.querySelector('.navbar')?.classList.remove('active');
+            const navbar = document.querySelector('.navbar');
+            if (navbar) navbar.classList.remove('active');
+            if (navOverlay) navOverlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
     }
 });
@@ -992,35 +1020,125 @@ if (estimationSection) {
     totalObserver.observe(estimationSection);
 }
 
-// Animate nom cards on scroll
+// Simplified animation - cards are visible by default, just add subtle animation
 function animateNomCards() {
     const nomCards = document.querySelectorAll('.nom-card');
     nomCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(50px) scale(0.9)';
-        
-        setTimeout(() => {
-            card.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        // Ensure cards are visible first
+        if (!card.classList.contains('animated')) {
+            // Make sure card is visible
             card.style.opacity = '1';
-            card.style.transform = 'translateY(0) scale(1)';
-        }, index * 150);
+            card.style.transform = 'translateY(0)';
+            card.style.visibility = 'visible';
+            
+            // Add subtle animation effect
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.classList.add('animated');
+        }
     });
 }
 
-// Trigger nom cards animation when section is visible
-const nomsSection = document.querySelector('.noms-commerciaux');
-if (nomsSection) {
-    const nomsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateNomCards();
-                nomsObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
+// Simplified visibility check - just ensure everything is visible
+function ensureNomCardsVisible() {
+    const nomCards = document.querySelectorAll('.nom-card');
+    const nomArabics = document.querySelectorAll('.nom-arabic');
+    const nomLatins = document.querySelectorAll('.nom-latin');
+    const nomHeaders = document.querySelectorAll('.nom-header');
+    const nomBadges = document.querySelectorAll('.nom-badge');
     
-    nomsObserver.observe(nomsSection);
+    // Simple visibility check - remove any inline styles that might hide elements
+    nomCards.forEach(card => {
+        if (card.style.opacity === '0') card.style.opacity = '1';
+        if (card.style.visibility === 'hidden') card.style.visibility = 'visible';
+    });
+    
+    nomHeaders.forEach(header => {
+        if (header.style.display === 'none') header.style.display = 'flex';
+        if (header.style.visibility === 'hidden') header.style.visibility = 'visible';
+    });
+    
+    nomArabics.forEach(arabic => {
+        if (arabic.style.display === 'none') arabic.style.display = 'block';
+        if (arabic.style.visibility === 'hidden') arabic.style.visibility = 'visible';
+        if (arabic.style.opacity === '0') arabic.style.opacity = '1';
+        if (!arabic.style.color || arabic.style.color === 'transparent') {
+            arabic.style.color = 'white';
+        }
+    });
+    
+    nomLatins.forEach(latin => {
+        if (latin.style.display === 'none') latin.style.display = 'block';
+        if (latin.style.visibility === 'hidden') latin.style.visibility = 'visible';
+        if (latin.style.opacity === '0') latin.style.opacity = '0.95';
+        if (!latin.style.color || latin.style.color === 'transparent') {
+            latin.style.color = 'rgba(255, 255, 255, 0.95)';
+        }
+    });
+    
+    nomBadges.forEach(badge => {
+        if (badge.style.display === 'none') badge.style.display = 'inline-block';
+        if (badge.style.visibility === 'hidden') badge.style.visibility = 'visible';
+    });
 }
+
+// Run visibility check on load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        ensureNomCardsVisible();
+    });
+} else {
+    ensureNomCardsVisible();
+}
+
+// Run on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    ensureNomCardsVisible();
+    
+    // Also run after a short delay to ensure everything is loaded
+    setTimeout(() => {
+        ensureNomCardsVisible();
+    }, 100);
+    setTimeout(() => {
+        ensureNomCardsVisible();
+    }, 500);
+});
+
+// Also run on window load
+window.addEventListener('load', () => {
+    ensureNomCardsVisible();
+});
+
+// Ensure nom cards are visible immediately
+document.addEventListener('DOMContentLoaded', () => {
+    const nomCards = document.querySelectorAll('.nom-card');
+    nomCards.forEach(card => {
+        // Force visibility
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+        card.style.visibility = 'visible';
+        card.style.display = 'flex';
+    });
+    
+    // Trigger animation when section is visible
+    const nomsSection = document.querySelector('.noms-commerciaux');
+    if (nomsSection) {
+        // Animate immediately
+        animateNomCards();
+        
+        const nomsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNomCards();
+                }
+            });
+        }, { 
+            threshold: 0.1,
+            rootMargin: '50px'
+        });
+        
+        nomsObserver.observe(nomsSection);
+    }
+});
 
 // Add click effect to nom cards
 document.querySelectorAll('.nom-card').forEach(card => {

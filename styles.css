@@ -36,6 +36,7 @@
     /* Typography */
     --font-primary: 'Inter', sans-serif;
     --font-display: 'Playfair Display', serif;
+    --font-arabic: 'Cairo', 'Segoe UI', 'Arial Unicode MS', 'Tahoma', 'Arial', sans-serif;
     
     /* Spacing */
     --section-padding: 80px 0;
@@ -166,27 +167,40 @@ body {
     position: relative;
     background: none;
     border: none;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.hamburger:hover {
+    background: rgba(45, 80, 22, 0.1);
 }
 
 .hamburger span {
-    width: 25px;
+    width: 28px;
     height: 3px;
-    background: var(--gray-700);
-    margin: 3px 0;
-    transition: var(--transition);
+    background: var(--tazmourt-primary);
+    margin: 4px 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+    transform-origin: center;
+}
+
+.hamburger.active span {
+    background: var(--tazmourt-primary);
 }
 
 .hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
+    transform: rotate(45deg) translate(7px, 7px);
 }
 
 .hamburger.active span:nth-child(2) {
     opacity: 0;
+    transform: translateX(-10px);
 }
 
 .hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
+    transform: rotate(-45deg) translate(7px, -7px);
 }
 
 /* Page Controls Container - Removed, buttons are now fixed */
@@ -1948,32 +1962,112 @@ section {
     cursor: not-allowed;
 }
 
+/* Mobile Menu Overlay */
+.nav-menu-overlay {
+    display: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
+        z-index: 1003;
+        position: relative;
+    }
+    
+    /* Overlay sombre pour le menu mobile */
+    .nav-menu-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        z-index: 1001;
+    }
+    
+    .nav-menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
     
     .nav-menu {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 85%;
+        max-width: 400px;
         height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(10px);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+        backdrop-filter: blur(20px);
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.15);
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2rem;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 6rem 0 2rem;
+        gap: 0.5rem;
         transform: translateX(-100%);
-        transition: transform 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 1002;
+        overflow-y: auto;
+    }
+    
+    /* Support mode sombre pour le menu mobile */
+    [data-theme="dark"] .nav-menu {
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.98) 0%, rgba(45, 45, 45, 0.98) 100%);
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    [data-theme="dark"] .nav-link {
+        color: var(--gray-200);
+    }
+    
+    [data-theme="dark"] .nav-link:hover,
+    [data-theme="dark"] .nav-link:active {
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.2), rgba(184, 134, 11, 0.2));
+        color: var(--tazmourt-accent);
     }
     
     .nav-menu.active {
         transform: translateX(0);
+    }
+    
+    /* Header avec logo dans le menu mobile */
+    .nav-menu::before {
+        content: 'Huile d\'Olive Premium';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        background: linear-gradient(135deg, var(--tazmourt-primary) 0%, var(--tazmourt-secondary) 100%);
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        color: white;
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 700;
+        z-index: 1;
+    }
+    
+    .nav-menu::after {
+        content: '\f1d8';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        position: absolute;
+        top: 1.5rem;
+        left: 2rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.5rem;
+        z-index: 2;
     }
     
     /* Hide nav controls when mobile menu is open */
@@ -1984,11 +2078,79 @@ section {
     
     .nav-menu li {
         margin: 0;
+        width: 100%;
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideInLeft 0.5s ease forwards;
+    }
+    
+    .nav-menu.active li:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+    
+    .nav-menu.active li:nth-child(2) {
+        animation-delay: 0.15s;
+    }
+    
+    .nav-menu.active li:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+    
+    .nav-menu.active li:nth-child(4) {
+        animation-delay: 0.25s;
+    }
+    
+    .nav-menu.active li:nth-child(5) {
+        animation-delay: 0.3s;
     }
     
     .nav-link {
-        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.25rem;
         font-weight: 600;
+        color: var(--gray-800);
+        padding: 1.25rem 2rem;
+        width: 100%;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border-left: 4px solid transparent;
+    }
+    
+    .nav-link:hover,
+    .nav-link:active {
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.08), rgba(184, 134, 11, 0.08));
+        color: var(--tazmourt-primary);
+        transform: translateX(8px);
+        border-left-color: var(--tazmourt-primary);
+    }
+    
+    /* Icônes pour les liens du menu */
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        right: 1.5rem;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid var(--gray-400);
+        border-top: 2px solid var(--gray-400);
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+        right: 1rem;
+        border-color: var(--tazmourt-primary);
+    }
+    
+    @keyframes slideInLeft {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
     
     .hero-content {
@@ -1998,15 +2160,26 @@ section {
     }
     
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
     
     .title-main {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
     
     .title-sub {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
     }
     
     .title-sub-wrapper {
@@ -2039,19 +2212,30 @@ section {
     
     .contact-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
     }
     
     .contact-form-container {
         order: 2;
+        padding: 2.5rem 2rem;
     }
     
     .contact-info {
         order: 1;
     }
     
+    .contact-item {
+        padding: 1rem 0;
+        font-size: 1.1rem;
+    }
+    
+    .contact-item i {
+        font-size: 1.75rem;
+    }
+    
     .contact-cta {
         order: 3;
+        padding: 2.5rem 2rem;
     }
     
     .back-to-top {
@@ -2077,43 +2261,102 @@ section {
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 2rem;
+        font-size: 2.8rem;
     }
     
     .title-main {
-        font-size: 2rem;
+        font-size: 2.8rem;
     }
     
     .title-sub {
-        font-size: 1.2rem;
-        letter-spacing: 1px;
+        font-size: 1.6rem;
+        letter-spacing: 2px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem;
+        line-height: 1.8;
     }
     
     .title-sub-wrapper {
-        padding: 0.3rem 0.8rem;
+        padding: 0.4rem 1rem;
     }
     
     .title-decoration {
-        height: 4px;
+        height: 5px;
+        width: 180px;
     }
     
     .title-arabic {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
     
     .section-title {
+        font-size: 2.4rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1.15rem;
+        margin-bottom: 2.5rem;
+        line-height: 1.7;
+    }
+    
+    .service-card {
+        padding: 2.5rem 2rem;
+    }
+    
+    .service-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .service-card li {
+        font-size: 1.1rem;
+        line-height: 1.9;
+        padding: 0.75rem 0;
+        padding-left: 1.75rem;
+    }
+    
+    .contact-intro p {
+        font-size: 1.15rem;
+        line-height: 1.9;
+    }
+    
+    .contact-form-container {
+        padding: 2.5rem 2rem;
+    }
+    
+    .contact-form-container h3 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-cta h3 {
         font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .contact-cta p {
+        font-size: 1.15rem;
+        line-height: 1.8;
     }
     
     .btn {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
+        padding: 1.1rem 2.25rem;
+        font-size: 1.05rem;
     }
     
     .hero-buttons,
     .cta-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
 }
 
@@ -2156,7 +2399,10 @@ section {
     background: linear-gradient(135deg, var(--white) 0%, var(--gray-100) 100%);
     padding: var(--section-padding);
     position: relative;
-    overflow: hidden;
+    overflow: visible !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .noms-commerciaux::before {
@@ -2174,12 +2420,18 @@ section {
 .noms-commerciaux .container {
     position: relative;
     z-index: 1;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .noms-intro {
     max-width: 900px;
     margin: 0 auto 4rem;
     text-align: center;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .intro-text {
@@ -2204,22 +2456,28 @@ section {
 }
 
 .noms-grid {
-    display: grid;
+    display: grid !important;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2.5rem;
     margin-bottom: 4rem;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .nom-card {
     background: var(--white);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 16px;
+    overflow: visible;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
     position: relative;
-    border: 2px solid transparent;
-    display: flex;
+    border: 1px solid var(--gray-200);
+    display: flex !important;
     flex-direction: column;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
+    min-height: 400px;
 }
 
 .nom-card::before {
@@ -2239,29 +2497,30 @@ section {
 }
 
 .nom-card:hover {
-    transform: translateY(-15px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     border-color: var(--tazmourt-primary);
 }
 
-.nom-header {
+.nom-card:hover .nom-header {
     background: linear-gradient(135deg, var(--tazmourt-primary), var(--tazmourt-secondary));
-    padding: 2rem;
+}
+
+.nom-header {
+    background: var(--tazmourt-primary);
+    padding: 2.5rem 2rem;
     text-align: center;
     color: var(--white);
     position: relative;
-    overflow: hidden;
-}
-
-.nom-header::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: shimmer 3s infinite;
+    overflow: visible;
+    z-index: 10;
+    border-radius: 16px 16px 0 0;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
 @keyframes shimmer {
@@ -2270,32 +2529,50 @@ section {
 }
 
 .nom-arabic {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 700;
-    margin-bottom: 0.5rem;
-    font-family: var(--font-display);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0;
+    font-family: var(--font-arabic);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    direction: rtl;
+    display: block;
+    line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    position: relative;
+    z-index: 11;
+    text-align: center;
+    color: var(--white);
+    width: 100%;
 }
 
 .nom-latin {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 600;
-    opacity: 0.95;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
+    letter-spacing: 3px;
+    margin: 0;
+    display: block;
+    color: rgba(255, 255, 255, 0.95);
+    text-transform: uppercase;
+    z-index: 11;
+    position: relative;
 }
 
 .nom-badge {
     display: inline-block;
-    padding: 0.5rem 1.2rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    letter-spacing: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    z-index: 11;
+    position: relative;
+    margin-top: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nom-badge.premium {
@@ -2402,6 +2679,11 @@ section {
     line-height: 1.6;
     margin-bottom: 0.5rem;
     font-weight: 500;
+    font-family: var(--font-arabic);
+    direction: rtl;
+    text-align: right;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .nom-meaning p.meaning-fr,
@@ -2410,6 +2692,9 @@ section {
     font-size: 0.95rem;
     font-style: italic;
     margin-bottom: 0;
+    font-family: var(--font-primary);
+    direction: ltr;
+    text-align: left;
 }
 
 .nom-advantages ul {
@@ -2616,41 +2901,111 @@ section {
 @media (max-width: 768px) {
     .noms-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
     }
     
     .intro-text {
-        padding: 2rem 1.5rem;
+        padding: 3rem 2.5rem;
     }
     
     .intro-text h3 {
-        font-size: 1.5rem;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
     }
     
     .intro-text p {
-        font-size: 1rem;
+        font-size: 1.15rem;
+        line-height: 1.9;
+    }
+    
+    .nom-card {
+        min-height: auto;
+        border-radius: 12px;
     }
     
     .nom-header {
-        padding: 1.5rem;
+        padding: 2.5rem 1.5rem;
+        min-height: 160px;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        overflow: visible;
     }
     
     .nom-arabic {
-        font-size: 2.5rem;
+        font-size: 3rem;
+        line-height: 1.3;
+        margin: 0;
+        padding: 0;
+        display: block;
+        text-align: center;
+        color: white;
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .nom-latin {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        margin: 0;
+        padding: 0;
+        display: block;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.95);
+        width: 100%;
+    }
+    
+    .nom-badge {
+        margin-top: 0.75rem;
+        font-size: 0.85rem;
+        padding: 0.5rem 1.25rem;
     }
     
     .nom-content {
-        padding: 1.5rem;
+        padding: 2.5rem 2rem;
     }
     
     .nom-meaning,
     .nom-concept,
     .nom-advantages {
-        padding: 1.2rem;
+        padding: 1.75rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .nom-meaning h4,
+    .nom-concept h4,
+    .nom-advantages h4 {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .nom-meaning p,
+    .nom-concept p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 0.75rem;
+    }
+    
+    .nom-meaning p.meaning-fr,
+    .nom-concept p.concept-fr {
+        font-size: 1.05rem;
+        margin-top: 0.75rem;
+        line-height: 1.7;
+    }
+    
+    .nom-advantages ul {
+        margin-top: 0.75rem;
+    }
+    
+    .nom-advantages li {
+        font-size: 1.05rem;
+        line-height: 1.9;
+        margin-bottom: 0.85rem;
+        padding-left: 1.75rem;
     }
     
     .noms-cta {
@@ -2677,20 +3032,107 @@ section {
 }
 
 @media (max-width: 480px) {
+    .nom-card {
+        border-radius: 12px;
+        min-height: auto;
+    }
+    
+    .nom-header {
+        padding: 2rem 1.25rem;
+        min-height: 150px;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
     .nom-arabic {
-        font-size: 2rem;
+        font-size: 2.8rem;
+        line-height: 1.3;
+        margin: 0;
+        padding: 0;
+        display: block;
+        text-align: center;
+        color: white;
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        font-weight: 700;
     }
     
     .nom-latin {
-        font-size: 1rem;
+        font-size: 1.4rem;
+        letter-spacing: 2px;
+        margin: 0;
+        padding: 0;
+        display: block;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.95);
+        width: 100%;
+        font-weight: 600;
+    }
+    
+    .nom-badge {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .nom-content {
+        padding: 2.25rem 1.75rem;
+    }
+    
+    .nom-meaning,
+    .nom-concept,
+    .nom-advantages {
+        padding: 1.75rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .nom-meaning h4,
+    .nom-concept h4,
+    .nom-advantages h4 {
+        font-size: 1.2rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .nom-meaning p,
+    .nom-concept p {
+        font-size: 1.1rem;
+        line-height: 1.9;
+        direction: rtl;
+        text-align: right;
+        margin-bottom: 0.85rem;
+    }
+    
+    .nom-meaning p.meaning-fr,
+    .nom-concept p.concept-fr {
+        font-size: 1.05rem;
+        margin-top: 0.85rem;
+        line-height: 1.8;
+    }
+    
+    .nom-advantages li {
+        font-size: 1.1rem;
+        line-height: 2;
+        margin-bottom: 1rem;
+        padding-left: 1.75rem;
     }
     
     .noms-cta {
-        padding: 2rem 1.5rem;
+        padding: 3rem 2rem;
     }
     
     .cta-content-noms h3 {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-content-noms p {
+        font-size: 1.1rem;
+        line-height: 1.8;
     }
 }
 
@@ -2792,6 +3234,28 @@ section {
 .estimation-table-wrapper {
     overflow-x: auto;
     margin: 2rem 0;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--tazmourt-primary) var(--gray-200);
+}
+
+.estimation-table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.estimation-table-wrapper::-webkit-scrollbar-track {
+    background: var(--gray-200);
+    border-radius: 4px;
+}
+
+.estimation-table-wrapper::-webkit-scrollbar-thumb {
+    background: var(--tazmourt-primary);
+    border-radius: 4px;
+}
+
+.estimation-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--tazmourt-secondary);
 }
 
 .estimation-table {
@@ -2871,6 +3335,9 @@ section {
     color: var(--gray-800);
     font-size: 1.1rem;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-align: center;
 }
 
 .detail-row {
@@ -2893,18 +3360,25 @@ section {
 .detail-cell span {
     color: var(--gray-700);
     font-size: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
 }
 
 .cost-cell {
     padding: 1.2rem 1rem;
     text-align: right;
     font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
 }
 
 .cost-value {
     color: var(--tazmourt-primary);
     font-size: 1.2rem;
     font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .cost-currency {
@@ -3065,95 +3539,274 @@ section {
 @media (max-width: 768px) {
     .estimation-intro {
         grid-template-columns: 1fr;
+        gap: 2.5rem;
+        margin-bottom: 3.5rem;
+    }
+    
+    .intro-card {
+        padding: 2.5rem 2rem;
+    }
+    
+    .intro-card h3 {
+        font-size: 1.65rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .intro-card p {
+        font-size: 1.1rem;
+        line-height: 1.8;
     }
     
     .estimation-table-container {
-        padding: 1.5rem;
+        padding: 2.5rem 2rem;
+    }
+    
+    .table-header h3 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .table-subtitle {
+        font-size: 1.05rem;
     }
     
     .estimation-table {
-        font-size: 0.9rem;
+        font-size: 1.05rem;
     }
     
     .estimation-table th {
-        padding: 0.8rem 0.5rem;
-        font-size: 0.85rem;
+        padding: 1.25rem 1rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        white-space: nowrap;
     }
     
     .category-cell,
     .detail-cell,
     .cost-cell {
-        padding: 1rem 0.5rem;
+        padding: 1.5rem 1rem;
     }
     
     .category-content {
-        gap: 0.5rem;
-    }
-    
-    .category-content i {
-        font-size: 1.5rem;
-    }
-    
-    .category-content span {
-        font-size: 0.95rem;
-    }
-    
-    .cost-value {
-        font-size: 1rem;
-    }
-    
-    .total-value {
-        font-size: 1.5rem;
-    }
-    
-    .estimation-features {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 1rem;
     }
     
-    .feature-box {
-        padding: 1rem;
-    }
-    
-    .feature-box i {
+    .category-content i {
         font-size: 2rem;
     }
     
+    .category-content span {
+        font-size: 1.15rem;
+        font-weight: 600;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+    
+    .detail-cell {
+        gap: 0.85rem;
+    }
+    
+    .detail-cell i {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+    
+    .detail-cell span {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .cost-value {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    
+    .total-value {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+    
+    .estimation-features {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1.25rem;
+    }
+    
+    .feature-box {
+        padding: 1.5rem 1.25rem;
+    }
+    
+    .feature-box i {
+        font-size: 2.25rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .feature-box h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .feature-box p {
+        font-size: 1rem;
+    }
+    
     .estimation-cta {
-        padding: 2rem 1.5rem;
+        padding: 3rem 2rem;
     }
     
     .cta-content h3 {
-        font-size: 1.5rem;
+        font-size: 1.85rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .cta-content p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 2.5rem;
     }
     
     .cta-buttons-estimation {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
     }
     
     .cta-buttons-estimation .btn {
         width: 100%;
         justify-content: center;
+        padding: 1.2rem 2rem;
+        font-size: 1.05rem;
     }
 }
 
 @media (max-width: 480px) {
+    .estimation-intro {
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    .intro-card {
+        padding: 2.25rem 1.75rem;
+    }
+    
+    .intro-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .intro-card p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+    
+    .estimation-table-container {
+        padding: 2rem 1.5rem;
+    }
+    
     .estimation-table-wrapper {
         overflow-x: scroll;
         -webkit-overflow-scrolling: touch;
     }
     
     .estimation-table {
-        min-width: 600px;
+        min-width: 650px;
+        font-size: 1.05rem;
     }
     
     .table-header h3 {
-        font-size: 1.5rem;
+        font-size: 1.85rem;
+        margin-bottom: 0.85rem;
+    }
+    
+    .table-subtitle {
+        font-size: 1.05rem;
+    }
+    
+    .estimation-table th {
+        font-size: 0.95rem;
+        padding: 1rem 0.75rem;
+        white-space: nowrap;
+    }
+    
+    .category-cell,
+    .detail-cell,
+    .cost-cell {
+        padding: 1.25rem 0.75rem;
+    }
+    
+    .category-content {
+        gap: 0.75rem;
+    }
+    
+    .category-content i {
+        font-size: 1.75rem;
+    }
+    
+    .category-content span {
+        font-size: 1.05rem;
+        line-height: 1.5;
+    }
+    
+    .detail-cell {
+        gap: 0.75rem;
+    }
+    
+    .detail-cell i {
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .detail-cell span {
+        font-size: 1rem;
+        line-height: 1.6;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .cost-value {
+        font-size: 1.15rem;
+        white-space: nowrap;
+    }
+    
+    .cost-currency {
+        font-size: 0.9rem;
+        margin-left: 0.25rem;
+    }
+    
+    .total-value {
+        font-size: 1.75rem;
     }
     
     .estimation-features {
         grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    
+    .feature-box {
+        padding: 1.5rem 1.25rem;
+    }
+    
+    .feature-box h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .feature-box p {
+        font-size: 1rem;
+    }
+    
+    .estimation-cta {
+        padding: 2.5rem 1.5rem;
+    }
+    
+    .cta-content h3 {
+        font-size: 1.6rem;
+    }
+    
+    .cta-content p {
+        font-size: 1.05rem;
+        line-height: 1.7;
     }
 }
 
